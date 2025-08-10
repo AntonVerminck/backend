@@ -1,4 +1,4 @@
-let CINEMAS = [
+export const CINEMAS = [
     {
       id: 1,
       name: 'Kinepolis Brugge',
@@ -18,7 +18,7 @@ let CINEMAS = [
       adres:''
     },
   ];
-let FILMS = [
+export const FILMS = [
     {
       id: 1,
       name: "Five Nights at Freddy's ",
@@ -32,7 +32,7 @@ let FILMS = [
       regisseur:"Nia DaCosta"
     }
   ];
-let TIJDSLOTS = [
+export const TIJDSLOTS = [
     {
       id: 1,
       date: '2021-05-21T17:30:00.000Z',
@@ -72,4 +72,3 @@ let TIJDSLOTS = [
     }
 ];
 
-module.exports={CINEMAS, FILMS, TIJDSLOTS };

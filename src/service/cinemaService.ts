@@ -1,58 +1,55 @@
-
-const { db } = require('../data');
-const{Cinema} = db;
+import { CINEMAS } from '../data/mock_data';
 
 
+let cinemas = [...CINEMAS];
 
-
-const getAll = async () => {
-  console.log(Cinema); 
-  return await Cinema.findAndCountAll() ;
+// Get all cinemas
+export const getAll = () => {
+  return cinemas;
 };
 
-const getById = async (id) => {
-  try {
-    const cinema = await Cinema.findByPk(id);
-    return cinema
-  } catch (error) {
-    throw handleDBError(error);
+// Get a cinema by id
+export const getById = (id: number) => {
+  const cinema = cinemas.find(c => c.id === id);
+  if (!cinema) {
+    throw new Error(`Cinema with id ${id} not found`);
   }
-}
-
-
-const create = async ({ naam, postcode, adress }) => {
-  try {
-    const id = await Cinema.create({ naam, postcode, adress });
-    return getById(id);
-  } catch (error) {
-    throw handleDBError(error);
-  }
+  return cinema;
 };
 
-const updateById = async (id, { name, rating }) => {
-  try {
-    await Cinema.updateById(id, { name, rating });
-    return getById(id);
-  } catch (error) {
-    throw handleDBError(error);
-  }
+// Create a new cinema (id will be auto-generated)
+export const create = ({ name, postcode, adres }: any) => {
+  const newId = cinemas.length ? Math.max(...cinemas.map(c => c.id)) + 1 : 1;
+  const newCinema = { id: newId, name, postcode, adres };
+  cinemas.push(newCinema);
+  return newCinema;
 };
 
-const deleteById = async (id) => {
-  try {
-    const deleted = await placeRepository.deleteById(id);
-
-    if (!deleted) {
-      throw ServiceError.notFound(`No place with id ${id} exists`, { id });
-    }
-  } catch (error) {
-    throw handleDBError(error);
+// Update an existing cinema by id
+export const updateById = (
+  id: number,
+  { name, postcode, adres }: any,
+) => {
+  const index = cinemas.findIndex(c => c.id === id);
+  if (index === -1) {
+    throw new Error(`Cinema with id ${id} not found`);
   }
-};
-
-module.exports = {
-    getAll,
-    create,
-    deleteById,
-    updateById
+  // Update only provided fields
+  cinemas[index] = {
+    ...cinemas[index],
+    ...(name !== undefined && { name }),
+    ...(postcode !== undefined && { postcode }),
+    ...(adres !== undefined && { adres }),
   };
+  return cinemas[index];
+};
+
+// Delete a cinema by id
+export const deleteById = (id: number) => {
+  const index = cinemas.findIndex(c => c.id === id);
+  if (index === -1) {
+    throw new Error(`Cinema with id ${id} not found`);
+  }
+  const deleted = cinemas.splice(index, 1)[0];
+  return deleted;
+};

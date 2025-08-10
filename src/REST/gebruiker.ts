@@ -1,5 +1,5 @@
 const Router = require('@koa/router');
-const gebruikerservice = require('../service/gebruiker');
+const gebruikerservice = require('../service/gebruikerService');
 
 const getAllGebruikers = async (ctx) => {
   ctx.body = gebruikerservice.getAll();
